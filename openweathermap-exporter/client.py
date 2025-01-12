@@ -4,15 +4,14 @@
 import argparse
 import logging
 import signal
-from time import sleep
-
-import yaml
 from os import getenv
 from pathlib import Path
+from time import sleep
 from typing import Dict, Optional
 
-from prometheus_client import start_http_server, Gauge, Enum
+import yaml
 from openweather.weather import OpenWeather
+from prometheus_client import start_http_server, Gauge
 
 
 def parse_config(_config_file=None) -> Dict:
@@ -25,7 +24,7 @@ def parse_config(_config_file=None) -> Dict:
     except FileNotFoundError:
         log.error("Config file does not exist.")
     except yaml.YAMLError as error:
-        if hasattr(error, 'problem_mark'):
+        if hasattr(error, "problem_mark"):
             mark = error.problem_mark
             log.error("Error in configuration")
             log.error(f"Error position: ({mark.line + 1}:{mark.column + 1})")
@@ -79,6 +78,7 @@ def shutdown(_signal):
     global running
     running = False
 
+
 if __name__ == "__main__":
     running = True
     args = parse_args()
@@ -110,9 +110,21 @@ if __name__ == "__main__":
     log = set_logging_level(args.verbosity, loglevel)
 
     TEMPERATURE = Gauge("owm_temperature", "The current Temperature", ["city", "country", "weather_condition"])
-    TEMPERATURE_MIN = Gauge("owm_temperature_min", "Minimum temperature at the moment. This is minimal currently observed temperature (within large megalopolises and urban areas)", ["city", "country"])
-    TEMPERATURE_MAX = Gauge("owm_temperature_max", "Maximum temperature at the moment. This is maximal currently observed temperature (within large megalopolises and urban areas).", ["city", "country"])
-    TEMPERATURE_FEEL = Gauge("owm_temperature_feel", "Temperature. This temperature parameter accounts for the human perception of weather.", ["city", "country"])
+    TEMPERATURE_MIN = Gauge(
+        "owm_temperature_min",
+        "Minimum temperature at the moment (within large megalopolises and urban areas)",
+        ["city", "country"],
+    )
+    TEMPERATURE_MAX = Gauge(
+        "owm_temperature_max",
+        "Maximum temperature at the moment (within large megalopolises and urban areas).",
+        ["city", "country"],
+    )
+    TEMPERATURE_FEEL = Gauge(
+        "owm_temperature_feel",
+        "Temperature. This temperature parameter accounts for the human perception of weather.",
+        ["city", "country"],
+    )
     HUMIDITY = Gauge("owm_humidity", "Humidity, %", ["city", "country"])
     PRESSURE = Gauge("owm_pressure", "Atmospheric pressure on the sea level, hPa", ["city", "country"])
     WIND_DIRECTION = Gauge("owm_wind_direction", "Wind direction, degrees (meteorological)", ["city", "country"])
