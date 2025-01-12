@@ -27,7 +27,7 @@ RUN PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy --categories ${categories}
 FROM base AS app
 
 ARG UID=10001
-RUN adduser -D -H -h /app -u "${UID}" appuser
+RUN adduser -D -H -h /app -u "${UID}" appuser && chown -R ${UID} /app
 
 USER appuser
 
