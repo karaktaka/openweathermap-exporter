@@ -1,0 +1,7 @@
+services:
+  openweathermap-exporter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: local/openweathermap-exporter
+    restart: unless-stopped

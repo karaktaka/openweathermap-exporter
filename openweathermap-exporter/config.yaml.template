@@ -1,0 +1,14 @@
+interval: 600 # OpenWeatherMap weather data is only updated every 10 minutes. So there is no need to poll more often than that.
+loglevel: INFO
+listen_port: 9126
+
+api_key: ""
+units: "C" # can be C (Celsius), F (Fahrenheit) or K (Kelvin)
+
+locations:
+  - name: "Berlin"
+    lat: 1.2
+    lon: 2.4
+  - name: "München"
+    lat: 3.5
+    lon: -6.7
