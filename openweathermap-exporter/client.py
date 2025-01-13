@@ -7,7 +7,7 @@ import signal
 from os import getenv
 from pathlib import Path
 from time import sleep
-from typing import Dict, Optional
+from typing import Dict
 
 import yaml
 from openweather.weather import OpenWeather
@@ -67,13 +67,6 @@ def set_logging_level(_verbosity, _level, _logger=None):
     return _logger
 
 
-def safe_list_get(_input_list: list, _idx: int, _default=None) -> Optional[str | int | float]:
-    try:
-        return _input_list[_idx]
-    except IndexError:
-        return _default
-
-
 def shutdown(_signal):
     global running
     running = False
@@ -109,7 +102,7 @@ if __name__ == "__main__":
     # set logging level
     log = set_logging_level(args.verbosity, loglevel)
 
-    TEMPERATURE = Gauge("owm_temperature", "The current Temperature", ["city", "country", "weather_condition"])
+    TEMPERATURE = Gauge("owm_temperature", "The current Temperature", ["city", "country"])
     TEMPERATURE_MIN = Gauge(
         "owm_temperature_min",
         "Minimum temperature at the moment (within large megalopolises and urban areas)",
@@ -132,6 +125,7 @@ if __name__ == "__main__":
     CLOUDINESS = Gauge("owm_cloudiness", "Cloudiness, %", ["city", "country"])
     SUNRISE_TIME = Gauge("owm_sunrise_time", "Sunrise Time", ["city", "country"])
     SUNSET_TIME = Gauge("owm_sunset_time", "Sunset Time", ["city", "country"])
+    WEATHER_CONDITION = Gauge("owm_weather_condition", "Weather Condition", ["city", "country", "condition"])
 
     start_http_server(listen_port)
     log.info("Exporter ready...")
@@ -179,7 +173,7 @@ if __name__ == "__main__":
                 cloudiness = data.get("clouds").get("all")
                 weather_condition = data.get("weather")[0].get("description")
 
-                TEMPERATURE.labels(city, country, weather_condition).set(current_temperature)
+                TEMPERATURE.labels(city, country).set(current_temperature)
                 TEMPERATURE_MIN.labels(city, country).set(min_temperature)
                 TEMPERATURE_MAX.labels(city, country).set(max_temperature)
                 TEMPERATURE_FEEL.labels(city, country).set(felt_temperature)
@@ -190,7 +184,9 @@ if __name__ == "__main__":
                 CLOUDINESS.labels(city, country).set(cloudiness)
                 SUNRISE_TIME.labels(city, country).set(sunrise)
                 SUNSET_TIME.labels(city, country).set(sunset)
+                WEATHER_CONDITION.labels(city, country, weather_condition).set(0)
         except Exception as error:
             log.error(error)
+            pass
         finally:
             sleep(interval)
