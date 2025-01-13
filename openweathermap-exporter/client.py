@@ -184,7 +184,7 @@ if __name__ == "__main__":
                 CLOUDINESS.labels(city, country).set(cloudiness)
                 SUNRISE_TIME.labels(city, country).set(sunrise)
                 SUNSET_TIME.labels(city, country).set(sunset)
-                WEATHER_CONDITION.labels(city, country, weather_condition).set(0)
+                WEATHER_CONDITION.labels(city, country, weather_condition).set(1)
         except Exception as error:
             log.error(error)
             pass
