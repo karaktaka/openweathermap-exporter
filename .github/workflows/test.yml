@@ -18,8 +18,8 @@ jobs:
     - name: Lint with flake8
       uses: py-actions/flake8@v2
       with:
-        path: "./openweathermap-exporter"
+        path: "./exporter"
     - name: Lint with black
       uses: psf/black@stable
       with:
-        src: "./openweathermap-exporter"
+        src: "./exporter"

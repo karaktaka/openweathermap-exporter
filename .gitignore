@@ -168,5 +168,5 @@ cython_debug/
 # Built Visual Studio Code Extensions
 *.vsix
 
-openweathermap-exporter/config.yaml
-openweathermap-exporter/weather_cache.sqlite
+exporter/config.yaml
+exporter/weather_cache.sqlite
