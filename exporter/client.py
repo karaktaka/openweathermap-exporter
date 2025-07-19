@@ -1,6 +1,19 @@
 #!/usr/bin/env python3
 # encoding=utf-8
 
+# /// script
+# requires-python = ">=3.13,<3.14"
+# dependencies = [
+#     "openweather-wrapper>=0.1.1,<0.2",
+#     "prometheus-client>=0.22,<0.23",
+#     "pyyaml>=6.0.2,<7.0",
+#     "aiohttp>=3.11.11,<4.0",
+#     "requests>=2.32.3",
+#     "requests-cache>=1.2.1",
+#     "matplotlib>=3.10.0"
+# ]
+# ///
+
 import argparse
 import logging
 import signal
@@ -14,22 +27,23 @@ from openweather.weather import OpenWeather
 from prometheus_client import start_http_server, Gauge
 
 
-def parse_config(_config_file=None) -> Dict:
+def parse_config(_config_file=None) -> Dict | None:
     if _config_file is None:
         _config_file = Path("config.yaml")
 
     try:
         with open(_config_file, "r") as file:
             _config = yaml.safe_load(file)
+            return _config
     except FileNotFoundError:
-        log.error("Config file does not exist.")
-    except yaml.YAMLError as error:
-        if hasattr(error, "problem_mark"):
-            mark = error.problem_mark
-            log.error("Error in configuration")
-            log.error(f"Error position: ({mark.line + 1}:{mark.column + 1})")
-    else:
-        return _config
+        print("Config file does not exist.")
+        return None
+    except yaml.YAMLError as _error:
+        if hasattr(_error, "problem_mark"):
+            mark = _error.problem_mark
+            print("Error in configuration")
+            print(f"Error position: ({mark.line + 1}:{mark.column + 1})")
+        raise
 
 
 def parse_args():

@@ -14,12 +14,14 @@ jobs:
         fetch-depth: 0
     - uses: actions/setup-python@v5
       with:
-        python-version: '3.12'
+        python-version: '3.13'
     - name: Lint with flake8
       uses: py-actions/flake8@v2
       with:
-        path: "./openweathermap-exporter"
+        path: "./exporter"
     - name: Lint with black
       uses: psf/black@stable
       with:
-        src: "./openweathermap-exporter"
+        options: "--check --diff -l 120"
+        src: "./exporter"
+
