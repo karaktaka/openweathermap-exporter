@@ -17,8 +17,9 @@ RUN adduser -D -H -h /app -u "${UID}" appuser
 USER appuser
 WORKDIR /app
 
-COPY --chown=${UID} exporter/client.py /app/
+COPY --chown=${UID} exporter/client.py exporter/client.py.lock /app/
 COPY --chown=${UID} exporter/config.yaml.template /app/config.yaml
-RUN uv sync --script client.py
+RUN --mount=type=cache,uid=${UID},target=/app/.cache \
+    uv sync --frozen --script client.py
 
 CMD [ "uv", "run", "--script" ,"client.py" ]
