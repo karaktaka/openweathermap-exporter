@@ -35,12 +35,12 @@ def parse_config(_config_file=None) -> Dict | None:
         with open(_config_file, "r") as file:
             _config = yaml.safe_load(file)
     except FileNotFoundError:
-        log.error("Config file does not exist.")
+        print("Config file does not exist.")
     except yaml.YAMLError as _error:
         if hasattr(_error, "problem_mark"):
             mark = _error.problem_mark
-            log.error("Error in configuration")
-            log.error(f"Error position: ({mark.line + 1}:{mark.column + 1})")
+            print("Error in configuration")
+            print(f"Error position: ({mark.line + 1}:{mark.column + 1})")
     else:
         return _config
 
