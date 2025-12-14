@@ -1,4 +1,0 @@
-services:
-  openweathermap-exporter:
-    image: ghcr.io/karaktaka/openweathermap-exporter
-    restart: unless-stopped

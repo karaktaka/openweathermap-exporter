@@ -32,6 +32,7 @@
 **/config.yaml
 **/config.yaml.template
 **/weather_cache.sqlite
+**/test_client.py
 .run
 .github
 .flake8
