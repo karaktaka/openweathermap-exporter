@@ -134,7 +134,7 @@ def shutdown(_signal):
     RUNNING = False
 
 
-def main(_api: OpenWeather, _locations: List[Dict[str, any]], _log: logging.Logger):
+def main(_api: OpenWeather, _units: str, _locations: List[Dict[str, any]], _log: logging.Logger):
     _data = {}
     while RUNNING:
         try:
@@ -219,7 +219,7 @@ if __name__ == "__main__":
         )
         listen_port: int = int(getenv("LISTEN_PORT", config.get("listen_port", "9126")))
         api_key: str | None = getenv("API_KEY", config.get("api_key"))
-        _units: str = getenv("UNITS", config.get("units", "C"))
+        units: str = getenv("UNITS", config.get("units", "C"))
         locations: list = config.get("locations", [])
 
         if not api_key:
@@ -236,7 +236,7 @@ if __name__ == "__main__":
 
         api = OpenWeather(api_key)
 
-        main(api, locations, log)
+        main(api, units, locations, log)
 
     except KeyboardInterrupt:
         print("Received interrupt signal, shutting down...")
