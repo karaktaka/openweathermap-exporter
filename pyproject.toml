@@ -11,8 +11,6 @@ dependencies = [
     "openweather-wrapper",
     "prometheus-client",
     "pyyaml",
-    "aiohttp>=3.11.11,<4.0",
-    "requests",
     "requests-cache",
     "matplotlib",
 ]
