@@ -32,7 +32,7 @@ jobs:
         run: uv sync --locked --all-extras --dev
 
       - name: Run tests
-        run: uv run pytest src/ -v
+        run: uv run pytest src/ -v --cov=src/ --cov-report=xml
   build:
     name: Build and Push Image
     runs-on: ubuntu-latest
