@@ -30,6 +30,8 @@
 **/secrets.dev.yaml
 **/values.dev.yaml
 **/config.yaml
+**/config.yaml.template
+**/weather_cache.sqlite
 .run
 .github
 .flake8

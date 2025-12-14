@@ -169,5 +169,5 @@ cython_debug/
 *.vsix
 
 # custom
-config.yaml
-weather_cache.sqlite
+**/config.yaml
+**/weather_cache.sqlite

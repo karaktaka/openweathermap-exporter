@@ -1,0 +1,24 @@
+[project]
+name = "openweathermap-exporter"
+description = "A basic exporter for openweathermap"
+version = "0.1.0"
+authors = [
+    { name = "Dennis Bernardy", email = "dennis@ethernerd.net" },
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "openweather-wrapper",
+    "prometheus-client",
+    "pyyaml",
+    "aiohttp>=3.11.11,<4.0",
+    "requests",
+    "requests-cache",
+    "matplotlib",
+]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.format]
+line-ending = "lf"

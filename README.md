@@ -1,4 +1,5 @@
 # openweathermap-exporter
+
 Simple Openweathermap Exporter for Prometheus
 
 ## Installation
@@ -14,15 +15,16 @@ api_key: ""
 units: "C" # can be C (Celsius), F (Fahrenheit) or K (Kelvin)
 
 locations:
+  - name: "London"
+    lat: 51.5085
+    lon: -0.1257
   - name: "Berlin"
-    lat: 1.2
-    lon: 2.4
-  - name: "München"
-    lat: 3.5
-    lon: -6.7
+    lat: 52.5244
+    lon: 13.4105
 ```
 
 As a minimum locations have to be defined. The rest can be set as environment variables.
+
 ```
 INTERVAL=600
 LOGLEVEL=INFO
@@ -33,6 +35,7 @@ UNITS="C"
 ```
 
 Prometheus scrape config:
+
 ```yaml
 scrape_configs:
   - job_name: openweathermap-exporter

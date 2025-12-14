@@ -1,29 +1,32 @@
-import unittest
-from unittest.mock import patch, mock_open, MagicMock
-from exporter.client import parse_config, parse_args, set_logging_level, shutdown
 import logging
 import signal
+import unittest
+from unittest.mock import MagicMock, mock_open, patch
+
 import yaml
+
+from src.client import configure_logging, parse_args, parse_config, shutdown
 
 
 class TestClient(unittest.TestCase):
     def setUp(self):
         """Set up test fixtures."""
-        self.logger = logging.getLogger('test_logger')
+        self.logger = logging.getLogger("test_logger")
         # Reset handlers before each test
         self.logger.handlers = []
 
     def tearDown(self):
         """Clean up after tests."""
         # Clean up logging handlers
-        logging.getLogger('test_logger').handlers = []
+        logging.getLogger("test_logger").handlers = []
         # Reset running state
-        import exporter.client
-        exporter.client.running = True
+        import src.client
+
+        src.client.RUNNING = True
 
     @patch("builtins.open", new_callable=mock_open, read_data="interval: 600\nloglevel: INFO\nlisten_port: 9126")
     def test_parse_config_valid(self, mock_file):
-        config = parse_config("config.yaml")
+        config = parse_config("../src/config.yaml")
         self.assertIsInstance(config, dict)
         self.assertEqual(config["interval"], 600)
         self.assertEqual(config["loglevel"], "INFO")
@@ -58,28 +61,33 @@ class TestClient(unittest.TestCase):
             self.assertEqual(args.verbosity, 0)
 
     def test_set_logging_level_with_verbosity(self):
-        logger = set_logging_level(2, "WARNING")
+        logger = configure_logging(2, "WARNING")
         self.assertEqual(logger.level, logging.INFO)
 
     def test_set_logging_level_without_verbosity(self):
-        logger = set_logging_level(0, "INFO")
+        logger = configure_logging(0, "INFO")
         self.assertEqual(logger.level, logging.INFO)
 
     def test_set_logging_level_custom_logger(self):
         custom_logger = logging.getLogger("test_logger")
-        logger = set_logging_level(1, "INFO", custom_logger)
+        logger = configure_logging(1, "INFO", custom_logger)
         self.assertEqual(logger.level, logging.WARNING)
         self.assertEqual(logger, custom_logger)
 
     def test_shutdown(self):
-        import exporter.client
-        exporter.client.running = True
-        shutdown(signal.SIGTERM)
-        self.assertFalse(exporter.client.running)
+        import src.client
 
-    @patch("builtins.open", new_callable=mock_open, read_data="api_key: test_key\nlocations:\n  - name: Berlin\n    lat: 52.52\n    lon: 13.41")
+        src.client.RUNNING = True
+        shutdown(signal.SIGTERM)
+        self.assertFalse(src.client.RUNNING)
+
+    @patch(
+        "builtins.open",
+        new_callable=mock_open,
+        read_data="api_key: test_key\nlocations:\n  - name: Berlin\n    lat: 52.52\n    lon: 13.41",
+    )
     def test_parse_config_with_locations(self, mock_file):
-        config = parse_config("config.yaml")
+        config = parse_config("../src/config.yaml")
         self.assertIsInstance(config, dict)
         self.assertEqual(config["api_key"], "test_key")
         self.assertIsInstance(config["locations"], list)
@@ -90,10 +98,11 @@ class TestClient(unittest.TestCase):
 
     @patch("builtins.open", new_callable=mock_open, read_data="api_key: null\nlocations: []")
     def test_parse_config_minimal(self, mock_file):
-        config = parse_config("config.yaml")
+        config = parse_config("../src/config.yaml")
         self.assertIsInstance(config, dict)
         self.assertIsNone(config["api_key"])
         self.assertEqual(config["locations"], [])
+
 
 if __name__ == "__main__":
     unittest.main()
