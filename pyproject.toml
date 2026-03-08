@@ -12,6 +12,7 @@ dependencies = [
     "prometheus-client",
     "pyyaml",
     "matplotlib",
+    "requests-cache",
 ]
 
 [dependency-groups]
