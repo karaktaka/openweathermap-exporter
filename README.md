@@ -1,4 +1,5 @@
 > **Note:** This project has moved to [Codeberg](https://codeberg.org/karaktaka/openweathermap-exporter).
+> This GitHub repository is no longer actively maintained.> **Note:** This project has moved to [Codeberg](https://codeberg.org/karaktaka/openweathermap-exporter).
 > This GitHub repository is no longer actively maintained.# openweathermap-exporter
 
 Simple Openweathermap Exporter for Prometheus
